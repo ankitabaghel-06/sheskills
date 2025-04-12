@@ -49,10 +49,10 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <div className="flex justify-center mb-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-8">
+      <Card className="w-full max-w-md shadow-lg border-0">
+        <CardHeader className="space-y-1 pb-6">
+          <div className="flex justify-center mb-6">
             <Link to="/" className="flex items-center gap-2">
               <div className="rounded-full bg-sheskills-purple p-1">
                 <svg
@@ -102,7 +102,7 @@ const Login = () => {
                 <label htmlFor="password" className="text-sm font-medium">
                   Password
                 </label>
-                <Link to="#" className="text-sm text-sheskills-purple hover:underline">
+                <Link to="#" className="text-xs text-sheskills-purple hover:underline">
                   Forgot password?
                 </Link>
               </div>
@@ -139,7 +139,7 @@ const Login = () => {
               )}
             </Button>
           </form>
-          <div className="relative">
+          <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t"></div>
             </div>
@@ -156,7 +156,7 @@ const Login = () => {
             GitHub
           </Button>
         </CardContent>
-        <CardFooter className="flex justify-center">
+        <CardFooter className="flex justify-center pt-0">
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Don't have an account?{" "}
             <Link to="/signup" className="text-sheskills-purple font-semibold hover:underline">

@@ -1,200 +1,300 @@
 
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import InternshipCard from "@/components/InternshipCard";
-import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Search, Filter } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 const internships = [
   {
-    title: "Frontend Development Intern",
-    company: "TechStars",
+    title: "Frontend Developer Intern",
+    company: "Microsoft",
     location: "Remote",
-    stipend: "₹15,000/month",
-    duration: "6 months",
-    lastDate: "April 30, 2025",
-    link: "https://internshala.com/internships/frontend-development-internship",
-    source: "Internshala"
-  },
-  {
-    title: "Data Science Intern",
-    company: "Analytics Hub",
-    location: "Bangalore (Hybrid)",
     stipend: "₹20,000/month",
     duration: "3 months",
-    lastDate: "May 15, 2025",
-    link: "https://www.linkedin.com/jobs/view/datascience-intern",
-    source: "LinkedIn"
+    lastDate: "30 Apr 2025",
+    link: "https://careers.microsoft.com/",
+    source: "Internshala"
   },
   {
     title: "UI/UX Design Intern",
-    company: "DesignMate",
+    company: "Google",
+    location: "Hybrid (Bangalore)",
+    stipend: "₹25,000/month",
+    duration: "6 months",
+    lastDate: "15 May 2025",
+    link: "https://careers.google.com/",
+    source: "LinkedIn"
+  },
+  {
+    title: "Data Science Intern",
+    company: "Amazon",
     location: "Remote",
-    stipend: "₹12,000/month",
+    stipend: "₹30,000/month",
     duration: "4 months",
-    lastDate: "April 22, 2025",
-    link: "https://internshala.com/internships/ui-ux-design-internship",
-    source: "Internshala"
-  },
-  {
-    title: "Digital Marketing Intern",
-    company: "GrowthGenius",
-    location: "Delhi (Onsite)",
-    stipend: "₹10,000/month",
-    duration: "3 months",
-    lastDate: "May 5, 2025",
-    link: "https://internshala.com/internships/digital-marketing-internship",
-    source: "Internshala"
-  },
-  {
-    title: "Content Writing Intern",
-    company: "ContentLabs",
-    location: "Remote",
-    stipend: "₹8,000/month",
-    duration: "2 months",
-    lastDate: "April 25, 2025",
-    link: "https://www.naukri.com/content-writing-internship-jobs",
+    lastDate: "20 May 2025",
+    link: "https://www.amazon.jobs/",
     source: "Naukri.com"
   },
   {
-    title: "Software Development Intern",
-    company: "CodeNation",
-    location: "Pune (Hybrid)",
+    title: "Full Stack Developer Intern",
+    company: "Flipkart",
+    location: "Hybrid (Bangalore)",
+    stipend: "₹22,000/month",
+    duration: "3 months",
+    lastDate: "30 May 2025",
+    link: "https://www.flipkartcareers.com/#!/",
+    source: "Internshala"
+  },
+  {
+    title: "Product Management Intern",
+    company: "PhonePe",
+    location: "Bangalore",
     stipend: "₹25,000/month",
     duration: "6 months",
-    lastDate: "May 20, 2025",
-    link: "https://www.linkedin.com/jobs/view/software-development-intern",
+    lastDate: "15 Jun 2025",
+    link: "https://www.phonepe.com/careers/",
     source: "LinkedIn"
+  },
+  {
+    title: "Digital Marketing Intern",
+    company: "Swiggy",
+    location: "Remote",
+    stipend: "₹15,000/month",
+    duration: "3 months",
+    lastDate: "10 Jun 2025",
+    link: "https://careers.swiggy.com/",
+    source: "Naukri.com"
   }
 ];
 
-const jobSites = [
+const platforms = [
   {
     name: "Internshala",
-    url: "https://internshala.com/",
-    description: "India's largest internship platform for students",
-    logo: "https://internshala.com/static/images/common/new_internshala_logo.svg"
+    url: "https://internshala.com/"
   },
   {
     name: "LinkedIn",
-    url: "https://www.linkedin.com/jobs/",
-    description: "Professional networking site with job opportunities",
-    logo: "https://content.linkedin.com/content/dam/me/business/en-us/amp/brand-site/v2/bg/LI-Bug.svg.original.svg"
+    url: "https://www.linkedin.com/jobs/"
   },
   {
     name: "Naukri.com",
-    url: "https://www.naukri.com/",
-    description: "One of India's leading job portals",
-    logo: "https://static.naukimg.com/s/4/100/i/naukri_Logo.png"
+    url: "https://www.naukri.com/"
   },
   {
     name: "Indeed",
-    url: "https://in.indeed.com/",
-    description: "Global job search site with various opportunities",
-    logo: "https://www.indeed.com/download/indeed-logo-png"
+    url: "https://www.indeed.co.in/"
+  },
+  {
+    name: "Monster",
+    url: "https://www.monsterindia.com/"
+  },
+  {
+    name: "AngelList",
+    url: "https://angel.co/jobs"
   }
 ];
 
 const Internships = () => {
-  const [email, setEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  const [activeTab, setActiveTab] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredInternships, setFilteredInternships] = useState(internships);
+
+  useEffect(() => {
+    filterInternships();
+  }, [activeTab, searchQuery]);
+
+  const filterInternships = () => {
+    let filtered = internships;
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      alert(`You've subscribed to weekly internship alerts with email: ${email}`);
-      setEmail("");
-    }, 1000);
+    // Apply search filter
+    if (searchQuery) {
+      filtered = filtered.filter(
+        (internship) =>
+          internship.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          internship.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          internship.location.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    
+    // Apply tab filter
+    if (activeTab !== "all") {
+      filtered = filtered.filter(
+        (internship) => internship.source.toLowerCase() === activeTab.toLowerCase()
+      );
+    }
+    
+    setFilteredInternships(filtered);
   };
-  
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    filterInternships();
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 py-16">
-        <div className="container">
-          <div className="max-w-3xl mx-auto text-center mb-8">
-            <h1 className="text-4xl font-bold mb-4">Internship Opportunities</h1>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
-              Find the perfect internship to gain experience and kickstart your career in tech.
+      <main className="flex-1 py-12">
+        <div className="container max-w-6xl px-4">
+          <div className="max-w-3xl mx-auto text-center mb-10">
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">Internship Opportunities</h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Find remote and flexible internships tailored for women in tech from Tier 2/3 cities.
             </p>
           </div>
           
-          <div className="bg-sheskills-light dark:bg-gray-800 rounded-xl p-6 mb-12 max-w-2xl mx-auto">
-            <h2 className="text-xl font-semibold mb-2">Get Weekly Internship Alerts</h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Subscribe to receive curated internship opportunities directly in your inbox.
-            </p>
-            <form onSubmit={handleSubmit} className="flex gap-2">
-              <Input
-                type="email"
-                placeholder="Your email address"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="flex-1"
-              />
-              <Button 
-                type="submit" 
-                className="bg-sheskills-purple hover:bg-sheskills-purple/90"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Subscribing..." : "Subscribe"}
-              </Button>
-            </form>
-          </div>
-          
-          <h2 className="text-2xl font-semibold mb-6">Current Opportunities</h2>
-          <div className="space-y-6">
-            {internships.map((internship, index) => (
-              <InternshipCard
-                key={index}
-                title={internship.title}
-                company={internship.company}
-                location={internship.location}
-                stipend={internship.stipend}
-                duration={internship.duration}
-                lastDate={internship.lastDate}
-                link={internship.link}
-                source={internship.source}
-              />
-            ))}
-          </div>
-          
-          <div className="mt-16">
-            <h2 className="text-2xl font-semibold mb-6">Find More Opportunities</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {jobSites.map((site, index) => (
+          <div className="bg-sheskills-light dark:bg-gray-800 p-6 rounded-xl mb-10">
+            <h2 className="text-xl font-semibold mb-4">Top Internship Platforms</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {platforms.map((platform, index) => (
                 <a 
-                  key={index}
-                  href={site.url}
-                  target="_blank"
+                  key={index} 
+                  href={platform.url} 
+                  target="_blank" 
                   rel="noopener noreferrer"
-                  className="block p-6 bg-white dark:bg-gray-800 rounded-xl border hover:shadow-md transition-shadow"
+                  className="flex items-center justify-center p-3 rounded-lg bg-white dark:bg-gray-700 shadow-sm hover:shadow-md transition border border-gray-100 dark:border-gray-600"
                 >
-                  <div className="h-12 mb-4 flex items-center">
-                    <img 
-                      src={site.logo} 
-                      alt={site.name} 
-                      className="max-h-full object-contain"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = 'none';
-                        (e.target as HTMLImageElement).nextSibling!.textContent = site.name;
-                        (e.target as HTMLImageElement).nextSibling!.className = "text-xl font-bold";
-                      }}
-                    />
-                    <span className="hidden"></span>
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2">{site.name}</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{site.description}</p>
+                  <span className="font-medium">{platform.name}</span>
                 </a>
               ))}
             </div>
           </div>
+          
+          <div className="flex flex-col md:flex-row gap-6 mb-8">
+            <form onSubmit={handleSearch} className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <Input
+                  type="text"
+                  placeholder="Search by title, company, or location..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </form>
+            
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="icon" className="h-10 w-10">
+                <Filter className="h-4 w-4" />
+              </Button>
+              <Button className="bg-sheskills-purple hover:bg-sheskills-purple/90">
+                Apply Filters
+              </Button>
+            </div>
+          </div>
+          
+          <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="mb-6">
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="internshala">Internshala</TabsTrigger>
+              <TabsTrigger value="linkedin">LinkedIn</TabsTrigger>
+              <TabsTrigger value="naukri.com">Naukri.com</TabsTrigger>
+            </TabsList>
+            
+            <Separator className="mb-6" />
+            
+            <TabsContent value="all" className="mt-0">
+              <div className="grid grid-cols-1 gap-6">
+                {filteredInternships.length > 0 ? (
+                  filteredInternships.map((internship, index) => (
+                    <InternshipCard
+                      key={index}
+                      title={internship.title}
+                      company={internship.company}
+                      location={internship.location}
+                      stipend={internship.stipend}
+                      duration={internship.duration}
+                      lastDate={internship.lastDate}
+                      link={internship.link}
+                      source={internship.source}
+                    />
+                  ))
+                ) : (
+                  <div className="text-center py-10">
+                    <p className="text-gray-500">No internships found matching your criteria.</p>
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="internshala" className="mt-0">
+              <div className="grid grid-cols-1 gap-6">
+                {filteredInternships.length > 0 ? (
+                  filteredInternships.map((internship, index) => (
+                    <InternshipCard
+                      key={index}
+                      title={internship.title}
+                      company={internship.company}
+                      location={internship.location}
+                      stipend={internship.stipend}
+                      duration={internship.duration}
+                      lastDate={internship.lastDate}
+                      link={internship.link}
+                      source={internship.source}
+                    />
+                  ))
+                ) : (
+                  <div className="text-center py-10">
+                    <p className="text-gray-500">No Internshala internships found matching your criteria.</p>
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="linkedin" className="mt-0">
+              <div className="grid grid-cols-1 gap-6">
+                {filteredInternships.length > 0 ? (
+                  filteredInternships.map((internship, index) => (
+                    <InternshipCard
+                      key={index}
+                      title={internship.title}
+                      company={internship.company}
+                      location={internship.location}
+                      stipend={internship.stipend}
+                      duration={internship.duration}
+                      lastDate={internship.lastDate}
+                      link={internship.link}
+                      source={internship.source}
+                    />
+                  ))
+                ) : (
+                  <div className="text-center py-10">
+                    <p className="text-gray-500">No LinkedIn internships found matching your criteria.</p>
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="naukri.com" className="mt-0">
+              <div className="grid grid-cols-1 gap-6">
+                {filteredInternships.length > 0 ? (
+                  filteredInternships.map((internship, index) => (
+                    <InternshipCard
+                      key={index}
+                      title={internship.title}
+                      company={internship.company}
+                      location={internship.location}
+                      stipend={internship.stipend}
+                      duration={internship.duration}
+                      lastDate={internship.lastDate}
+                      link={internship.link}
+                      source={internship.source}
+                    />
+                  ))
+                ) : (
+                  <div className="text-center py-10">
+                    <p className="text-gray-500">No Naukri.com internships found matching your criteria.</p>
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
       <Footer />
