@@ -51,6 +51,14 @@ This project is built with:
 - Tailwind CSS
 
 Yes it is!
+Deploys for peaceful-clafoutis-e73f26
+http://sheskills.com
+
+Deploys from github.com/harshita2904-coder/sheskills-empower-her-future.
+
+Published main@HEAD
+
+Auto publishing is on. Deploys from main are published automatically.
 
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
