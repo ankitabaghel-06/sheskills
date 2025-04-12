@@ -1,16 +1,6 @@
-# Welcome to your Lovable project
-
-## Project info
-
-**URL**: https://lovable.dev/projects/0f71ea5c-ff58-41b2-8eba-10192bd5f873
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/0f71ea5c-ff58-41b2-8eba-10192bd5f873) and start prompting.
+simply visit are website 
+https://preview--sheskills-empower-her-future.lovable.app/
+ and start prompting.
 
 Changes made via Lovable will be committed automatically to this repo.
 
