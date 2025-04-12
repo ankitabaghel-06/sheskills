@@ -10,9 +10,19 @@ interface InternshipCardProps {
   duration: string;
   lastDate: string;
   link: string;
+  source?: string;
 }
 
-const InternshipCard = ({ title, company, location, stipend, duration, lastDate, link }: InternshipCardProps) => {
+const InternshipCard = ({ 
+  title, 
+  company, 
+  location, 
+  stipend, 
+  duration, 
+  lastDate, 
+  link,
+  source = "Internshala"
+}: InternshipCardProps) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl border shadow-sm hover:shadow-md transition-shadow p-6">
       <div className="flex flex-col sm:flex-row justify-between gap-4 mb-4">
@@ -39,8 +49,13 @@ const InternshipCard = ({ title, company, location, stipend, duration, lastDate,
       
       <div className="border-t pt-4 mt-4">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div className="text-sm">
-            <span className="text-red-500">Apply by:</span> {lastDate}
+          <div>
+            <div className="text-sm">
+              <span className="text-red-500">Apply by:</span> {lastDate}
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              Source: {source}
+            </div>
           </div>
           <Button asChild className="bg-sheskills-purple hover:bg-sheskills-purple/90">
             <a href={link} target="_blank" rel="noopener noreferrer" className="flex items-center">

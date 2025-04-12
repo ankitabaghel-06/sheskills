@@ -14,7 +14,8 @@ const internships = [
     stipend: "₹15,000/month",
     duration: "6 months",
     lastDate: "April 30, 2025",
-    link: "#",
+    link: "https://internshala.com/internships/frontend-development-internship",
+    source: "Internshala"
   },
   {
     title: "Data Science Intern",
@@ -23,7 +24,8 @@ const internships = [
     stipend: "₹20,000/month",
     duration: "3 months",
     lastDate: "May 15, 2025",
-    link: "#",
+    link: "https://www.linkedin.com/jobs/view/datascience-intern",
+    source: "LinkedIn"
   },
   {
     title: "UI/UX Design Intern",
@@ -32,7 +34,8 @@ const internships = [
     stipend: "₹12,000/month",
     duration: "4 months",
     lastDate: "April 22, 2025",
-    link: "#",
+    link: "https://internshala.com/internships/ui-ux-design-internship",
+    source: "Internshala"
   },
   {
     title: "Digital Marketing Intern",
@@ -41,7 +44,8 @@ const internships = [
     stipend: "₹10,000/month",
     duration: "3 months",
     lastDate: "May 5, 2025",
-    link: "#",
+    link: "https://internshala.com/internships/digital-marketing-internship",
+    source: "Internshala"
   },
   {
     title: "Content Writing Intern",
@@ -50,7 +54,8 @@ const internships = [
     stipend: "₹8,000/month",
     duration: "2 months",
     lastDate: "April 25, 2025",
-    link: "#",
+    link: "https://www.naukri.com/content-writing-internship-jobs",
+    source: "Naukri.com"
   },
   {
     title: "Software Development Intern",
@@ -59,7 +64,35 @@ const internships = [
     stipend: "₹25,000/month",
     duration: "6 months",
     lastDate: "May 20, 2025",
-    link: "#",
+    link: "https://www.linkedin.com/jobs/view/software-development-intern",
+    source: "LinkedIn"
+  }
+];
+
+const jobSites = [
+  {
+    name: "Internshala",
+    url: "https://internshala.com/",
+    description: "India's largest internship platform for students",
+    logo: "https://internshala.com/static/images/common/new_internshala_logo.svg"
+  },
+  {
+    name: "LinkedIn",
+    url: "https://www.linkedin.com/jobs/",
+    description: "Professional networking site with job opportunities",
+    logo: "https://content.linkedin.com/content/dam/me/business/en-us/amp/brand-site/v2/bg/LI-Bug.svg.original.svg"
+  },
+  {
+    name: "Naukri.com",
+    url: "https://www.naukri.com/",
+    description: "One of India's leading job portals",
+    logo: "https://static.naukimg.com/s/4/100/i/naukri_Logo.png"
+  },
+  {
+    name: "Indeed",
+    url: "https://in.indeed.com/",
+    description: "Global job search site with various opportunities",
+    logo: "https://www.indeed.com/download/indeed-logo-png"
   }
 ];
 
@@ -127,8 +160,40 @@ const Internships = () => {
                 duration={internship.duration}
                 lastDate={internship.lastDate}
                 link={internship.link}
+                source={internship.source}
               />
             ))}
+          </div>
+          
+          <div className="mt-16">
+            <h2 className="text-2xl font-semibold mb-6">Find More Opportunities</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {jobSites.map((site, index) => (
+                <a 
+                  key={index}
+                  href={site.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block p-6 bg-white dark:bg-gray-800 rounded-xl border hover:shadow-md transition-shadow"
+                >
+                  <div className="h-12 mb-4 flex items-center">
+                    <img 
+                      src={site.logo} 
+                      alt={site.name} 
+                      className="max-h-full object-contain"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = 'none';
+                        (e.target as HTMLImageElement).nextSibling!.textContent = site.name;
+                        (e.target as HTMLImageElement).nextSibling!.className = "text-xl font-bold";
+                      }}
+                    />
+                    <span className="hidden"></span>
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">{site.name}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{site.description}</p>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </main>

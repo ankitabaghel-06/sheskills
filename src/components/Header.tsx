@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Github, Shield, LogIn, UserPlus } from "lucide-react";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -59,14 +59,28 @@ const Header = () => {
           <Link to="/inspiration" className="text-sm font-medium hover:text-sheskills-purple transition-colors">
             Inspiration
           </Link>
+          <Link to="/github" className="text-sm font-medium hover:text-sheskills-purple transition-colors">
+            <Github size={16} className="inline mr-1" />
+            GitHub
+          </Link>
+          <Link to="/women-safety" className="text-sm font-medium hover:text-sheskills-purple transition-colors">
+            <Shield size={16} className="inline mr-1" />
+            Safety
+          </Link>
         </nav>
         
         <div className="hidden md:flex items-center gap-4">
-          <Button variant="outline" className="border-sheskills-purple text-sheskills-purple hover:bg-sheskills-purple hover:text-white">
-            Login
+          <Button asChild variant="outline" className="border-sheskills-purple text-sheskills-purple hover:bg-sheskills-purple hover:text-white">
+            <Link to="/login">
+              <LogIn className="mr-2 h-4 w-4" />
+              Login
+            </Link>
           </Button>
-          <Button className="bg-sheskills-purple hover:bg-sheskills-purple/90">
-            Sign Up
+          <Button asChild className="bg-sheskills-purple hover:bg-sheskills-purple/90">
+            <Link to="/signup">
+              <UserPlus className="mr-2 h-4 w-4" />
+              Sign Up
+            </Link>
           </Button>
         </div>
         
@@ -96,12 +110,26 @@ const Header = () => {
             <Link to="/inspiration" className="py-2 hover:text-sheskills-purple transition-colors">
               Inspiration
             </Link>
+            <Link to="/github" className="py-2 hover:text-sheskills-purple transition-colors">
+              <Github size={16} className="inline mr-1" />
+              GitHub
+            </Link>
+            <Link to="/women-safety" className="py-2 hover:text-sheskills-purple transition-colors">
+              <Shield size={16} className="inline mr-1" />
+              Safety
+            </Link>
             <div className="flex flex-col gap-2 pt-2">
-              <Button variant="outline" className="w-full border-sheskills-purple text-sheskills-purple hover:bg-sheskills-purple hover:text-white">
-                Login
+              <Button asChild variant="outline" className="w-full border-sheskills-purple text-sheskills-purple hover:bg-sheskills-purple hover:text-white">
+                <Link to="/login">
+                  <LogIn className="mr-2 h-4 w-4" />
+                  Login
+                </Link>
               </Button>
-              <Button className="w-full bg-sheskills-purple hover:bg-sheskills-purple/90">
-                Sign Up
+              <Button asChild className="w-full bg-sheskills-purple hover:bg-sheskills-purple/90">
+                <Link to="/signup">
+                  <UserPlus className="mr-2 h-4 w-4" />
+                  Sign Up
+                </Link>
               </Button>
             </div>
           </nav>

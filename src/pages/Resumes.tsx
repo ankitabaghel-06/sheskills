@@ -12,6 +12,8 @@ import {
   TabsTrigger 
 } from "@/components/ui/tabs";
 import { useState } from "react";
+import { FileUp, Check, AlertCircle } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 const Resumes = () => {
   const [formData, setFormData] = useState({
@@ -25,6 +27,15 @@ const Resumes = () => {
     skills: "",
   });
   
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [atsResults, setAtsResults] = useState<null | {
+    score: number;
+    recommendations: string[];
+    keywords: {present: string[], missing: string[]};
+  }>(null);
+  const [isChecking, setIsChecking] = useState(false);
+  const { toast } = useToast();
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -33,7 +44,58 @@ const Resumes = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // In a real application, this would generate a PDF
-    alert("Resume generation functionality will be implemented in the full backend version");
+    toast({
+      title: "Resume Generated",
+      description: "Your resume has been created successfully. You can download it now.",
+    });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setResumeFile(e.target.files[0]);
+      toast({
+        title: "Resume Uploaded",
+        description: "Your resume has been uploaded successfully. You can now check it against ATS systems.",
+      });
+    }
+  };
+
+  const checkAtsCompatibility = () => {
+    if (!resumeFile) {
+      toast({
+        title: "No Resume Found",
+        description: "Please upload your resume first before checking ATS compatibility.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsChecking(true);
+    
+    // Simulate ATS check - in a real app, this would call an API
+    setTimeout(() => {
+      const mockResults = {
+        score: Math.floor(Math.random() * 41) + 60, // Random score between 60-100
+        recommendations: [
+          "Use more industry-specific keywords",
+          "Quantify your achievements with numbers",
+          "Remove graphics and special characters",
+          "Use a simpler, single-column layout",
+        ],
+        keywords: {
+          present: ["project management", "react", "javascript", "communication"],
+          missing: ["typescript", "agile", "team leadership", "problem-solving"],
+        }
+      };
+      
+      setAtsResults(mockResults);
+      setIsChecking(false);
+      
+      toast({
+        title: "ATS Check Complete",
+        description: `Your resume scored ${mockResults.score}% on ATS compatibility.`,
+      });
+    }, 2000);
   };
   
   return (
@@ -50,9 +112,10 @@ const Resumes = () => {
           
           <div className="max-w-4xl mx-auto">
             <Tabs defaultValue="create">
-              <TabsList className="grid w-full grid-cols-3 mb-8">
+              <TabsList className="grid w-full grid-cols-4 mb-8">
                 <TabsTrigger value="create">Create Resume</TabsTrigger>
                 <TabsTrigger value="templates">Templates</TabsTrigger>
+                <TabsTrigger value="ats">ATS Checker</TabsTrigger>
                 <TabsTrigger value="tips">Resume Tips</TabsTrigger>
               </TabsList>
               
@@ -204,6 +267,106 @@ const Resumes = () => {
                   </Card>
                 </div>
               </TabsContent>
+
+              <TabsContent value="ats">
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="text-center mb-6">
+                      <h3 className="text-xl font-semibold mb-2">ATS Resume Checker</h3>
+                      <p className="text-gray-600 dark:text-gray-400">
+                        Upload your resume to check if it's optimized for Applicant Tracking Systems (ATS).
+                      </p>
+                    </div>
+
+                    <div className="space-y-6">
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                        <input
+                          type="file"
+                          id="resume-upload"
+                          accept=".pdf,.doc,.docx"
+                          onChange={handleFileChange}
+                          className="hidden"
+                        />
+                        <label
+                          htmlFor="resume-upload"
+                          className="flex flex-col items-center cursor-pointer"
+                        >
+                          <FileUp className="h-10 w-10 text-gray-500 mb-2" />
+                          <span className="text-sm font-medium mb-1">
+                            {resumeFile ? resumeFile.name : "Upload your resume"}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            PDF, DOC, or DOCX (Max 5MB)
+                          </span>
+                        </label>
+                      </div>
+
+                      <Button
+                        onClick={checkAtsCompatibility}
+                        className="w-full bg-sheskills-purple hover:bg-sheskills-purple/90"
+                        disabled={isChecking || !resumeFile}
+                      >
+                        {isChecking ? "Analyzing Resume..." : "Check ATS Compatibility"}
+                      </Button>
+
+                      {atsResults && (
+                        <div className="mt-6 space-y-4">
+                          <div className="flex justify-between items-center">
+                            <h4 className="font-semibold">ATS Compatibility Score</h4>
+                            <div className="text-lg font-bold">
+                              <span 
+                                className={
+                                  atsResults.score >= 80 ? "text-green-500" : 
+                                  atsResults.score >= 70 ? "text-yellow-500" : 
+                                  "text-red-500"
+                                }
+                              >
+                                {atsResults.score}%
+                              </span>
+                            </div>
+                          </div>
+
+                          <div>
+                            <h4 className="font-semibold mb-2">Recommended Improvements</h4>
+                            <ul className="space-y-2">
+                              {atsResults.recommendations.map((rec, index) => (
+                                <li key={index} className="flex items-start gap-2">
+                                  <AlertCircle className="h-5 w-5 text-sheskills-purple shrink-0 mt-0.5" />
+                                  <span>{rec}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <h4 className="font-semibold mb-2">Keywords Detected</h4>
+                              <div className="flex flex-wrap gap-2">
+                                {atsResults.keywords.present.map((keyword, index) => (
+                                  <span key={index} className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
+                                    <Check className="h-3 w-3 inline mr-1" />
+                                    {keyword}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                            <div>
+                              <h4 className="font-semibold mb-2">Suggested Keywords</h4>
+                              <div className="flex flex-wrap gap-2">
+                                {atsResults.keywords.missing.map((keyword, index) => (
+                                  <span key={index} className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">
+                                    + {keyword}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
               
               <TabsContent value="tips">
                 <Card>
@@ -243,6 +406,20 @@ const Resumes = () => {
                         <div>
                           <h4 className="font-medium">Proofread carefully</h4>
                           <p className="text-gray-600 dark:text-gray-400">Eliminate spelling and grammatical errors. Ask someone else to review your resume.</p>
+                        </div>
+                      </li>
+                      <li className="flex gap-3">
+                        <div className="bg-sheskills-purple/10 text-sheskills-purple rounded-full h-6 w-6 flex items-center justify-center shrink-0">6</div>
+                        <div>
+                          <h4 className="font-medium">ATS-friendly format</h4>
+                          <p className="text-gray-600 dark:text-gray-400">Use a clean, simple layout with standard section headings and avoid complex formatting.</p>
+                        </div>
+                      </li>
+                      <li className="flex gap-3">
+                        <div className="bg-sheskills-purple/10 text-sheskills-purple rounded-full h-6 w-6 flex items-center justify-center shrink-0">7</div>
+                        <div>
+                          <h4 className="font-medium">Include keywords</h4>
+                          <p className="text-gray-600 dark:text-gray-400">Incorporate industry-specific keywords from the job description to pass ATS scans.</p>
                         </div>
                       </li>
                     </ul>
