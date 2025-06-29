@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 simply visit are website 
 https://preview--sheskills-empower-her-future.lovable.app/
  and start prompting.
@@ -63,3 +64,7 @@ Auto publishing is on. Deploys from main are published automatically.
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+=======
+# sheskills
+To empower her future
+>>>>>>> da36d773ffe170038ea055b92f44b931b3633c05
